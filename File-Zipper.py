@@ -1,7 +1,8 @@
 from cProfile import label
-
 import PySimpleGUI as sg
 from Zip_Creator import make_archive
+
+sg.theme('DarkAmber')
 
 label1 = sg.Text("Select files to compress")
 input1 = sg.Input()
@@ -18,10 +19,18 @@ window = sg.Window("File Compressor", layout=[[label1, input1,choose_button1],
                                               [label2, input2,choose_button2],
                                               [compress_button, output_label]])
 while True:
-	event, values = window.read()
-	filepaths = values['files'].split(";")
-	folder = values['folder']
-	make_archive(filepaths, folder)
-	window["output"].update(value="Compression completed successfully!")
 
-window.close
+	try:
+		event, values = window.read()
+		filepaths = values['files'].split(";")
+		folder = values['folder']
+		make_archive(filepaths, folder)
+		window["output"].update(value=f"Successfully compressed files to {folder}")
+	except (AttributeError, TypeError) :
+		sg.WINDOW_CLOSED
+		break
+window.close()
+
+
+
+
